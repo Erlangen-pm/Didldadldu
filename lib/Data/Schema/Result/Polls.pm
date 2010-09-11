@@ -1,7 +1,7 @@
-package Data::Result::Polls;
-use base 'DBIx::Class:Core'
+package Data::Schema::Result::Polls;
+use base 'DBIx::Class:Core';
 
-__PACKAGE__->table('options');
+__PACKAGE__->table('polls');
 __PACKAGE__->add_columns(qw(id text userid code));
 
 
