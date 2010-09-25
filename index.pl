@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use lib './lib';
-#use Data::Schema;
+use Data::Schema;
 use Mojolicious::Lite;
 
 get '/' => sub { shift->render(text => 'Hello World!') };
