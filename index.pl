@@ -8,9 +8,9 @@ use Data::Schema;
 use Mojolicious::Lite;
 
 get '/' => sub { shift->render(text => 'Hello World!') };
-get '/:qid' => [ qid => qr/\w+/ ] => sub {
+get '/:code' => [ code => qr/\w+/ ] => sub {
     my $self = shift;
-    my $qid = $self->param('qid');
+    my $code = $self->param('code');
     $self->stash( title  => 'Testumfrage' );
     $self->stash( header => [qw(test 123 wow)]);
     $self->stash( rows   => [
@@ -18,7 +18,8 @@ get '/:qid' => [ qid => qr/\w+/ ] => sub {
             [qw(paul    0 0 1)],
             [qw(karsten 1 1 0)],
         ]);
-} => 'qform';
+    $self->stash( user   => ['Isch', 1, 0, 0] );
+} => 'pollform';
 
 app->start;
 
@@ -37,7 +38,7 @@ __DATA__
     </body>
 </html>
 
-@@ qform.html.ep
+@@ pollform.html.ep
 % layout 'default';
         <table>
             <tr>
@@ -52,6 +53,14 @@ __DATA__
                 <th><%= shift @$row %></th>
 <% for my $entry ( @$row ) { %>
                 <td><input type="checkbox"<%= $entry ? ' checked="checked"' : '' %> disabled="disabled" /></td>
+<% } %>
+            </tr>
+<% } %>
+<% if ( defined $user ) { %>
+            <tr>
+                <th class="uservote"><%= shift @$user %></th>
+<% for my $entry ( @$user ) { %>
+                <td><input type="checkbox"<%= $entry ? ' checked="checked"' : '' %> /></td>
 <% } %>
             </tr>
 <% } %>
