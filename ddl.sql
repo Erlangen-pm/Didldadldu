@@ -1,31 +1,33 @@
 BEGIN TRANSACTION;
-CREATE TABLE "users" (
-        "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
-        "name" VARCHAR(128) NOT NULL  UNIQUE ,
-        "password" varchar(16) NOT NULL ,
-        "email" VARCHAR(512) NOT NULL ,
-        "registerdate" DATETIME,
-        "lastlogin" DATETIME
+CREATE TABLE "users" ( -- Benutzer, welche Umfragen anlegen können oder die bei geschlossenen Umfragen abstimmen können
+        "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , -- Interne ID
+        "name" VARCHAR(128) NOT NULL  UNIQUE , -- Benutzername für die Anmeldung
+        "password" varchar(16) NOT NULL , -- Passwort für die Anmeldung
+        "email" VARCHAR(512) NOT NULL , -- Email für Benachrichtigungen und so
+        "registerdate" DATETIME, -- Wann hat sich der Benutzer angemeldet
+        "lastlogin" DATETIME -- Wann war der Benutzer das letzte mal eingeloggt
 );
-CREATE TABLE "votes" (
-        "optionid" INTEGER NOT NULL ,
-        "userid" INTEGER NOT NULL ,
-        "vote" BOOL, 
-        "votetime" DATETIME, 
-        PRIMARY KEY ("optionid","userid")
+CREATE TABLE "votes" ( -- Stimmen für eine Wahlmöglichkeit einer Umfrage
+        "optionid" INTEGER NOT NULL , -- Intere ID der Wahlmöglichkeit
+        "userid" INTEGER , -- Interne ID des abstimmenden Benutzers bei geschlossenen Umfragen
+        "vote" BOOL, -- Wie hat der Benutzer abgestimmt
+        "votetime" DATETIME, -- Wann hat der Benutzer abgestimmt
+        PRIMARY KEY ("optionid","userid") -- Zusammengesetzter Primary-Key
 );
-CREATE TABLE "options" (
-        "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
-        "pollid" INTEGER NOT NULL , 
-        "text" VARCHAR(128) NOT NULL 
+CREATE TABLE "options" ( -- Wahlmöglichkeiten einer Umfrage
+        "id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , -- Interne ID der Wahlmöglichkeit
+        "pollid" INTEGER NOT NULL , -- ID der zugehörigen Umfrage
+        "text" VARCHAR(128) NOT NULL -- Überschrift der Wahlmöglichkeit
 );
-CREATE TABLE "polls" (
-        "id" INTEGER PRIMARY KEY  NOT NULL ,
-        "text" VARCHAR(1024) NOT NULL ,
-        "userid" INTEGER NOT NULL ,
-        "code" VARCHAR(32) NOT NULL ,
-        "starttime" DATETIME,
-        "endtime" DATETIME,
-        "creationtime" DATETIME
+CREATE TABLE "polls" ( -- Die Umfrage selber
+        "id" INTEGER PRIMARY KEY  NOT NULL , -- Interne ID der Umfrage
+        "text" VARCHAR(1024) NOT NULL , -- Anschreiben für die Umfrage
+        "userid" INTEGER NOT NULL , -- ID des Umfrageinitator-Benutzers
+        "code" VARCHAR(32) NOT NULL , -- Globaler Umfragecode
+        "multi" BOOL DEFAULT 0, -- Mehrfachauswahl möglich
+        "closed" BOOL DEFAULT 1, -- Umfrage nur für angemeldete Benutzer
+        "starttime" DATETIME, -- Beginn der Umfrage
+        "endtime" DATETIME, -- Vorbestimmtes Ende der Umfrage
+        "creationtime" DATETIME DEFAULT -- Wann wurde die Umfrage erstellt
 );
 COMMIT;
