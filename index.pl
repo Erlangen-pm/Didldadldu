@@ -7,18 +7,28 @@ use lib './lib';
 use Data::Schema;
 use Mojolicious::Lite;
 
+sub get_schema { MyDatabase::Main->connect('dbi:SQLite:data.sqlite') }
+
 get '/' => sub { shift->render(text => 'Hello World!') };
 get '/:code' => [ code => qr/\w+/ ] => sub {
-    my $self = shift;
-    my $code = $self->param('code');
-    $self->stash( title  => 'Testumfrage' );
-    $self->stash( header => [qw(test 123 wow)]);
-    $self->stash( rows   => [
-            [qw(harry   1 0 1)],
-            [qw(paul    0 0 1)],
-            [qw(karsten 1 1 0)],
-        ]);
-    $self->stash( user   => ['Isch', 1, 0, 0] );
+    my $self   = shift;
+    my $code   = $self->param('code');
+    my $schema = get_schema();
+    my $poll   = $schema->resultset('Polls')->search( { code => $code } )->next;
+    return unless $poll;
+    my $options =
+      $schema->resultset('Options')
+      ->search( { pollid => $poll->id }, { join => ['users'] } );
+    return unless $options;
+    $self->stash( title => $poll->text );
+    my ( $rows, $headers, $user ) = ( [], [], [] );
+
+    while ( my $option = $options->next ) {
+
+    }
+    $self->stash( header => $headers );
+    $self->stash( rows   => $rows );
+    $self->stash( user   => $users );
 } => 'pollform';
 
 app->start;
