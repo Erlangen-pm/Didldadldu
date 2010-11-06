@@ -15,21 +15,25 @@ get '/:code' => [ code => qr/\w+/ ] => sub {
     my $self = shift;
     my $code = $self->param('code');
     my $dbh  = get_dbh();
+    my $poll = $dbh->selectrow_arrayref( << 'EOSQL', {}, $code );
+SELECT id,text,multi
+FROM polls
+WHERE code=? AND endtime>=CURRENT_TIME
+LIMIT 1
+EOSQL
     return unless $poll;
-    my $header = [ map { $_->[0] } @{ $dbh->fetchall_arrayref( << 'EOSQL' ) } ];
-SELECT o.text
-FROM options o 
-    INNER JOIN polls p ON o.pollid=p.id 
-WHERE p.code=?
-ORDER BY o.id
+    my $header =
+      [ map { $_->[0] }
+          @{ $dbh->selectall_arrayref( << 'EOSQL', {}, $poll->[0] ) } ];
+SELECT text
+FROM options 
+WHERE pollid=?
+ORDER BY id
 EOSQL
     return unless $header;
-    $self->stash( title => $poll->text );
+    $self->stash( title => $poll->[1] );
     my ( $rows, $user ) = ( [], [] );
 
-    while ( my $option = $options->next ) {
-
-    }
     $self->stash( header => $header );
     $self->stash( rows   => $rows );
     $self->stash( user   => $user );
