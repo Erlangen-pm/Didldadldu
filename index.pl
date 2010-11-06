@@ -4,24 +4,30 @@ use strict;
 use warnings;
 
 use lib './lib';
-use Data::Schema;
+use DBI;
 use Mojolicious::Lite;
 
-sub get_schema { Data::Schema->connect('dbi:SQLite:data.sqlite') }
+sub get_dbh {
+    DBI->connect( 'dbi:SQLite:data.sqlite', '', '', { RaiseError => 1 } );
+}
 
-get '/' => sub { shift->render(text => 'Hello World!') };
+get '/' => sub { shift->render( text => 'Hello World!' ) };
 get '/:code' => [ code => qr/\w+/ ] => sub {
-    my $self   = shift;
-    my $code   = $self->param('code');
-    my $schema = get_schema();
-    my $poll   = $schema->resultset('Polls')->search( { code => $code } )->next;
+    my $self = shift;
+    my $code = $self->param('code');
+    my $dbh  = get_dbh();
+    my $poll = $schema->resultset('Polls')->search( { code => $code } )->next;
     return unless $poll;
-    my $options =
-      $schema->resultset('Options')
-      ->search( { pollid => $poll->id }, { join => ['users'] } );
-    return unless $options;
+    my $header = [ map { $_->[0] } @{ $dbh->fetchall_arrayref( << 'EOSQL' ) } ];
+SELECT o.text
+FROM options o 
+    INNER JOIN polls p ON o.pollid=p.id 
+WHERE p.code=?
+ORDER BY o.id
+EOSQL
+    return unless $header;
     $self->stash( title => $poll->text );
-    my ( $rows, $header, $user ) = ( [], [], [] );
+    my ( $rows, $user ) = ( [], [] );
 
     while ( my $option = $options->next ) {
 
