@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 
-use lib './lib';
 use DBI;
 use Mojolicious::Lite;
 
@@ -16,7 +15,6 @@ get '/:code' => [ code => qr/\w+/ ] => sub {
     my $self = shift;
     my $code = $self->param('code');
     my $dbh  = get_dbh();
-    my $poll = $schema->resultset('Polls')->search( { code => $code } )->next;
     return unless $poll;
     my $header = [ map { $_->[0] } @{ $dbh->fetchall_arrayref( << 'EOSQL' ) } ];
 SELECT o.text
