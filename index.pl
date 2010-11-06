@@ -7,7 +7,7 @@ use lib './lib';
 use Data::Schema;
 use Mojolicious::Lite;
 
-sub get_schema { MyDatabase::Main->connect('dbi:SQLite:data.sqlite') }
+sub get_schema { Data::Schema->connect('dbi:SQLite:data.sqlite') }
 
 get '/' => sub { shift->render(text => 'Hello World!') };
 get '/:code' => [ code => qr/\w+/ ] => sub {
@@ -21,14 +21,14 @@ get '/:code' => [ code => qr/\w+/ ] => sub {
       ->search( { pollid => $poll->id }, { join => ['users'] } );
     return unless $options;
     $self->stash( title => $poll->text );
-    my ( $rows, $headers, $user ) = ( [], [], [] );
+    my ( $rows, $header, $user ) = ( [], [], [] );
 
     while ( my $option = $options->next ) {
 
     }
-    $self->stash( header => $headers );
+    $self->stash( header => $header );
     $self->stash( rows   => $rows );
-    $self->stash( user   => $users );
+    $self->stash( user   => $user );
 } => 'pollform';
 
 app->start;
@@ -60,8 +60,8 @@ __DATA__
 
 <% for my $row ( @$rows ) { %>
             <tr>
-                <th><%= shift @$row %></th>
-<% for my $entry ( @$row ) { %>
+                <th><%= shift @$rows %></th>
+<% for my $entry ( @$rows ) { %>
                 <td><input type="checkbox"<%= $entry ? ' checked="checked"' : '' %> disabled="disabled" /></td>
 <% } %>
             </tr>
