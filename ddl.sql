@@ -18,6 +18,7 @@ CREATE TABLE "votes" ( -- Stimmen für eine Wahlmöglichkeit einer Umfrage
 CREATE TABLE "options" ( -- Wahlmöglichkeiten einer Umfrage
         "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , -- Interne ID der Wahlmöglichkeit
         "pollid" INTEGER NOT NULL REFERENCES polls(id), -- ID der zugehörigen Umfrage
+        "order" INTEGER; -- Sortierung der Wahlmöglichkeiten, ansonsten wird nach ID soriert
         "text" VARCHAR(128) NOT NULL -- Überschrift der Wahlmöglichkeit
 );
 CREATE TABLE "polls" ( -- Die Umfrage selber
