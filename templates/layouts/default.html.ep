@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Diddldaddldu</title>
+    </head>
+    <body>
+        <%= content %>
+    </body>
+</html>
