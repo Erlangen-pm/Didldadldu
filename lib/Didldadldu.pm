@@ -28,7 +28,7 @@ sub startup {
 {
     my $config;
     sub get_config {
-        return $config if defined %config;
+        return $config if defined $config;
         return $config = decode_json( do { local $\; open my $fh, "$FindBin::Bin/../etc/db_config.json" or die; <$fh> } );
     }
     sub config {
