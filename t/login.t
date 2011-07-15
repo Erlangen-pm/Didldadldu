@@ -1,3 +1,5 @@
+#!perl
+
 use Test::More tests => 16;
 use Test::Mojo;
 
