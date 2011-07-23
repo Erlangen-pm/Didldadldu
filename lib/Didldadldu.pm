@@ -12,8 +12,17 @@ sub startup {
     # Routes
     my $r = $self->routes;
 
-    # Normal route to controller
-    $r->route('/welcome')->to('example#welcome', id => 1);
+    $r->route('/new')->bridge('login#check_credentials')->via('get')
+      ->to('manage#createform');
+      
+    $r->route('/new')->bridge('login#check_credentials')->via('post')
+      ->to('manage#create');
+
+    $r->route( '/:id', id => qr/\w+/ )->bridge('view#is_public')->via('get')
+      ->to('view#list');
+
+    $r->route( '/:id', id => qr/\w+/ )->bridge('view#is_public')->via('post')
+      ->to('view#vote');
 }
 
 1;
