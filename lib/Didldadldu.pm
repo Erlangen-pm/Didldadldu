@@ -12,10 +12,17 @@ sub startup {
     # Routes
     my $r = $self->routes;
 
-    $r->route('/new')->bridge('login#check_credentials')->via('get')
+    $r->route('register')->via('get')->to('login#registerform');
+    $r->route('register')->via('post')->to('login#register');
+
+    $r->route('/login')->via('get')->to('login#loginform');
+    $r->route('/login')->bridge('login#check_credentials')->via('post')
+      ->to('login#login');
+
+    $r->route('/new')->bridge('login#check_session')->via('get')
       ->to('manage#createform');
-      
-    $r->route('/new')->bridge('login#check_credentials')->via('post')
+
+    $r->route('/new')->bridge('login#check_session')->via('post')
       ->to('manage#create');
 
     $r->route( '/:id', id => qr/\w+/ )->bridge('view#is_public')->via('get')
