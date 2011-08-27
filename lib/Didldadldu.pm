@@ -51,6 +51,9 @@ sub startup {
 
     $r->route( '/alter/:code', code => qr/\w+/ )->via('post')
       ->to('manage#alter')->name('update');
+
+    $r->route( '/del/:code', code => qr/\w+/ )->via('get')
+      ->to('manage#del')->name('del');
 }
 
 1;

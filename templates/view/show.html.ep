@@ -44,5 +44,6 @@
 </table>
 % end
 <p><%= link_to 'Abstimmung ändern' => 'alter', { code => $code} %></p>
+<p><%= link_to 'Abstimmung löschen' => 'del', { code => $code} %></p>
 <p><%= link_to 'Neue Abstimmung anlegen' => 'new' %></p>
 
