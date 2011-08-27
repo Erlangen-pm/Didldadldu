@@ -17,7 +17,7 @@ sub alterform {
     my $p = $db->resultset('Poll')->find( { code => $c } );
     return $s->redirect_to('new') unless $p;
     $s->stash( question => $p->text );
-    my $options = $p->search_related('options');
+    my $options = $p->options;
     $s->stash( answers => join "\n", map { $_->text } $options->all );
     $s->stash( code => $c );
     $s->render( template => 'manage/createform' );
@@ -32,7 +32,7 @@ sub del {
     $o->search_related('votes')->delete;
     $o->delete;
     $p->delete;
-    $s->redirect_to( 'new' );
+    $s->redirect_to('new');
 }
 
 sub _factor {
@@ -84,7 +84,7 @@ sub _update {
 sub _add_answers {
     my ( $s, $p, $a ) = @_;
     $p->create_related( 'options', { text => $_ } )
-      for map { chomp; $_ ? $_ : () } split /\n/, $a;
+      for map { s/\A\s+//gxms; s/\s+\z//gxms; $_ ? $_ : () } split /\n+/, $a;
 }
 
 sub _make_code { sprintf '%x', time }

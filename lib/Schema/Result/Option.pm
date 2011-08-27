@@ -6,7 +6,7 @@ __PACKAGE__->set_primary_key('id');
 __PACKAGE__->belongs_to( poll => 'Schema::Result::Poll', 'pollid' );
 __PACKAGE__->has_many(
     votes => 'Schema::Result::Vote',
-    'optionid', { order_by => 'optionid', group_by => 'user' }
+    'optionid', { order_by => 'user', group_by => 'user' }
 );
 
 1;

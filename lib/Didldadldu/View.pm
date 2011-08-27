@@ -10,7 +10,7 @@ sub _get_baseinfo {
     my $db      = $c->app->db;
     my $poll    = $db->resultset('Poll')->find( { code => $code } );
     if ( $poll ) {
-        my $options = $poll->search_related('options');
+        my $options = $poll->options;
         return $code, $db, $poll, $options;
     }
     else {
