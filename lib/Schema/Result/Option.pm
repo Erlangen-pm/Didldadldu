@@ -1,4 +1,4 @@
-package Schema::Result::Option;
+package Schema::Result::Options;
 use base qw(DBIx::Class::Core);
 __PACKAGE__->table('options');
 __PACKAGE__->add_columns(qw(id pollid order text));

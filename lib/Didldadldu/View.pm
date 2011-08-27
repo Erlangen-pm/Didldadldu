@@ -9,8 +9,4 @@ sub vote {
     my $self = shift;
 }
 
-sub is_public {
-    my $self = shift;
-}
-
 1;

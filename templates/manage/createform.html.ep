@@ -1,0 +1,8 @@
+% layout 'default';
+%= form_for new => ( method => 'post' ) => begin
+<table>
+    <tr><th><label for="question">Frage:</label></th><td><%= text_field 'question', id => 'question' %></td></tr>
+    <tr><th><label for="answers">Antworten:</label></th><td><%= text_area  'answers', id => 'answers' %></p></td></tr>
+    <tr><th></th><td><%= submit_button 'Anlegen' %></td></tr>
+</table>
+% end;

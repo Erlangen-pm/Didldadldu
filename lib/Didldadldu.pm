@@ -4,32 +4,43 @@ use strict;
 use warnings;
 
 use base 'Mojolicious';
+use DBI;
+
+my ( $dbh, $config );
+
+sub dbh {
+    my $self = shift;
+    return $dbh if defined $dbh;
+    return $dbh = DBI->connect( $self->config()->{'dsn'} );
+}
+
+sub config {
+    return $config if defined $config;
+    return $config = $_[0]->stash('config');
+}
 
 # This method will run once at server start
 sub startup {
     my $self = shift;
+    $config = $self->plugin('json_config') unless defined $config;
 
     # Routes
     my $r = $self->routes;
 
-    $r->route('register')->via('get')->to('login#registerform');
-    $r->route('register')->via('post')->to('login#register');
+    $r->route('/')->via('get')->to('manage#createform');
+    $r->route('/new')->via('get')->to('manage#createform');
 
-    $r->route('/login')->via('get')->to('login#loginform');
-    $r->route('/login')->bridge('login#check_credentials')->via('post')
-      ->to('login#login');
+    $r->route('/new')->via('post')->to('manage#create');
 
-    $r->route('/new')->bridge('login#check_session')->via('get')
-      ->to('manage#createform');
+    $r->route( '/:code', code => qr/\w+/ )->via('get')->to('view#list');
 
-    $r->route('/new')->bridge('login#check_session')->via('post')
-      ->to('manage#create');
+    $r->route( '/:code', code => qr/\w+/ )->via('post')->to('vote#cast');
 
-    $r->route( '/:id', id => qr/\w+/ )->bridge('view#is_public')->via('get')
-      ->to('view#list');
+    $r->route( '/:code/alter', code => qr/\w+/ )->via('get')
+      ->to('manage#alterform');
 
-    $r->route( '/:id', id => qr/\w+/ )->bridge('view#is_public')->via('post')
-      ->to('view#vote');
+    $r->route( '/:code/alter', code => qr/\w+/ )->via('post')
+      ->to('manage#alter');
 }
 
 1;
