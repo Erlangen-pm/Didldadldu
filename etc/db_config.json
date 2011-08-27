@@ -1,5 +1,0 @@
-{
-    dsn:    'var/data.sqlite',
-    dbuser: '',
-    dbpass: ''
-}
