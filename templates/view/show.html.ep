@@ -1,0 +1,48 @@
+% layout 'default';
+<h1>Abstimmung</h1>
+<p>Frage: <%= $poll->text %></p>
+%= form_for cast => {code => $code}, ( method => 'post' ) => begin
+% if (validator_has_errors) {
+    <div class="error">
+        Es sind Fehler beim Ausfüllen der Abstimmung aufgetreten.
+        <%= validator_error 'user' %>
+    </div>
+% }
+<table border="1">
+    <tr>
+        <td></td>
+% while ( my $o = $options->next ) {
+        <th><%= $o->text %></th>
+% }
+    </tr>
+% for my $user ( keys %$votes ) {
+    <tr>
+        <th><%= $user %></th>
+%   $options->reset;
+%   while ( my $o = $options->next ) {
+%       if ( $votes->{$user}{$o->id} ) {
+        <td>&#10003;</td>
+%       } else {
+        <td></td>
+%       }
+%   }
+    </tr>
+% }
+    <tr>
+        <th><%= text_field 'user', id => 'user' %></th>
+% $options->reset;
+% while ( my $o = $options->next ) {
+        <td><%= check_box $o->id, 1 %></td>
+% }
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="<%= $options->count %>">
+            <%= submit_button 'Abstimmen' %>
+        </td>
+    </tr>
+</table>
+% end
+<p><%= link_to 'Abstimmung ändern' => 'alter', { code => $code} %></p>
+<p><%= link_to 'Neue Abstimmung anlegen' => 'new' %></p>
+

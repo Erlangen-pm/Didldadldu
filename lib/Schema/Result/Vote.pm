@@ -1,4 +1,4 @@
-package Schema::Result::Votes;
+package Schema::Result::Vote;
 use base qw(DBIx::Class::Core);
 __PACKAGE__->table('votes');
 __PACKAGE__->add_columns(qw(optionid user));

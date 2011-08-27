@@ -1,8 +1,33 @@
 % layout 'default';
+% title $code ? "Abstimmung '$code' ändern (Löscht alle Daten!!! #FIXME)" : 'Abstimmung erstellen';
+<h1><%= title %></h1>
+% if (validator_has_errors) {
+    <div class="error">Die unten stehenden Felder sind auszufüllen!</div>
+% }
 %= form_for new => ( method => 'post' ) => begin
+%= hidden_field code => $code;
 <table>
-    <tr><th><label for="question">Frage:</label></th><td><%= text_field 'question', id => 'question' %></td></tr>
-    <tr><th><label for="answers">Antworten:</label></th><td><%= text_area  'answers', id => 'answers' %></p></td></tr>
-    <tr><th></th><td><%= submit_button 'Anlegen' %></td></tr>
+    <tr>
+        <th><label for="question">Frage:</label></th>
+        <td><%= text_field 'question', id => 'question', value => $question %></td>
+        <td><%= validator_error 'question' %></td>
+    </tr>
+    <tr>
+        <th><label for="answers">Antworten:</label></th>
+        <td>
+            <%= text_area  'answers', id => 'answers', begin %>
+<%= $answers %>
+% end
+        </td>
+        <td><%= validator_error 'answers' %></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><%= submit_button $code ? 'Ändern' : 'Anlegen' %></td>
+        <td><% if ( $code ) { 
+            <%= link_to 'Ohne Speichern zurück zur Abstimmung' => 'show', {code => $code} %>
+         <% } %>
+         </td>
+    </tr>
 </table>
 % end;
