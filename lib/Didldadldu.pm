@@ -22,38 +22,27 @@ sub startup {
     # Helper function returning our model instance
     $self->helper( db => sub { return $schema } );
 
-    $self->plugin(
-        'validator' => {
-            messages => {
-                REQUIRED => 'Dieses Feld wird zwingend benötigt!',
-                LENGTH_CONSTRAINT_FAILED =>
-                  'Dieses Feld muss zwischen 10 und 255 Zeichen lang sein!'
-            }
-        }
-    );
-
     # Routes
     my $r = $self->routes;
 
-    $r->route('/')->via('get')->to('manage#createform');
-    $r->route('/new')->via('get')->to('manage#createform');
+    $r->route('/')->via('get')->to('manage_survey#create_form');
+    $r->route('/new')->via('post')->to('manage_survey#create');
+    my $admin = $r->route('/:admincode', admincode => qr(\w{32}));
+    $admin->via('get')->to('manage_survey#view');
+    $admin->route('/modify')->via('get')->to('manage_survey#modify_form');
+    $admin->route('/modify')->via('post')->to('manage_survey#modify');
+    $admin->route('/deactivate')->to('manage_survey#deactivate');
+    $admin->route('/reactivate')->to('manage_survey#reactivate');
+    $admin->route('/delete')->to('manage_survey#delete');
 
-    $r->route('/new')->via('post')->to('manage#create');
+    $admin->route('/create_option')->to('manage_option#create');
+    my $admin_option = $admin->route('/:position', position => qr(\d+));
+    $admin_option->route('/modify')->via('get')->to('manage_option#modify_form');
+    $admin_option->route('/modify')->via('post')->to('manage_option#modify');
+    $admin_option->route('/move/:new_position', new_position => qr(\d+))->to('manage_option#move');
+    $admin_option->route('/delete')->to('manage_option#delete');
 
-    $r->route( '/:code', code => qr/\w+/ )->via('get')->to('view#show')
-      ->name('show');
-
-    $r->route( '/:code', code => qr/\w+/ )->via('post')->to('view#cast')
-      ->name('cast');
-
-    $r->route( '/alter/:code', code => qr/\w+/ )->via('get')
-      ->to('manage#alterform')->name('alter');
-
-    $r->route( '/alter/:code', code => qr/\w+/ )->via('post')
-      ->to('manage#alter')->name('update');
-
-    $r->route( '/del/:code', code => qr/\w+/ )->via('get')
-      ->to('manage#del')->name('del');
+    my $v = $r->route('/:usercode', usercode => qr(\w{16}));
 }
 
 1;
