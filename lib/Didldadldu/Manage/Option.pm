@@ -1,4 +1,5 @@
 package Didldadldu::Manage::Option;
+use Mojo::Base 'Mojolicious::Controller';
 
 =head1 Controler Manage_Option
 
