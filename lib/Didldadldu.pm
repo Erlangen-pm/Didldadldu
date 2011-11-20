@@ -35,7 +35,8 @@ sub startup {
     $admin->route('/reactivate')->to('manage_survey#reactivate');
     $admin->route('/delete')->to('manage_survey#delete');
 
-    $admin->route('/create_option')->to('manage_option#create');
+    $admin->route('/create_option')->via('get')->to('manage_option#create_form');
+    $admin->route('/create_option')->via('post')->to('manage_option#create');
     my $admin_option = $admin->route('/:position', position => qr(\d+));
     $admin_option->route('/modify')->via('get')->to('manage_option#modify_form');
     $admin_option->route('/modify')->via('post')->to('manage_option#modify');
@@ -43,7 +44,7 @@ sub startup {
     $admin_option->route('/delete')->to('manage_option#delete');
 
     my $userview = $r->route('/:usercode', usercode => qr(\w{16}));
-    $userview->via('get')->to('survey#view');
+    $userview->via('get')->to('survey_voter#view');
     $userview->route('/register')->via('post')->to('survey_voter#register');
     my $voter = $userview->route('/:name', name => qr(\w+));
     $voter->route('/:modify')->via('post')->to('survey_voter#modify');
