@@ -31,8 +31,7 @@ sub startup {
     $r->route('/')->via('get')->to('manage-survey#create_form');
     $r->route('/new')->via('post')->to('manage-survey#create');
     my $admin = $r->route('/:admincode', admincode => qr(\w{32}));
-    $admin->via('get')->to('manage-survey#view');
-    $admin->route('/modify')->via('get')->to('manage-survey#modify_form');
+    $admin->via('get')->to('manage-survey#modify_form');
     $admin->route('/modify')->via('post')->to('manage-survey#modify');
     $admin->route('/deactivate')->to('manage-survey#deactivate');
     $admin->route('/reactivate')->to('manage-survey#reactivate');

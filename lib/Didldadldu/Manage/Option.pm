@@ -1,7 +1,7 @@
 package Didldadldu::Manage::Option;
 use Mojo::Base 'Mojolicious::Controller';
 
-=head1 Controler Manage_Option
+=head1 Controller Manage_Option
 
 manages options of the survey
 
