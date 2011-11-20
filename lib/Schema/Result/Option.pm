@@ -30,7 +30,13 @@ something to read for the voters.
 
 =cut
 
-__PACKAGE__->add_columns(qw(id survey_id position text));
+__PACKAGE__->add_columns(
+    id => { data_type => 'bigint', is_nullable => 0, is_auto_increment => 1 },
+    survey_id =>
+      { data_type => 'bigint', is_foreign_key => 1, is_nullable => 0 },
+    position => { data_type => 'integer', is_nullable => 0 },
+    text     => { data_type => 'varchar', is_nullable => 0, size => 255 },
+);
 __PACKAGE__->set_primary_key('id');
 
 =head1 CONSTRAINS

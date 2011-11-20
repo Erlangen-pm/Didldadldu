@@ -28,7 +28,13 @@ refuses the option.
 
 =cut
 
-__PACKAGE__->add_columns(qw(option_id voter_id flag));
+__PACKAGE__->add_columns(
+    option_id =>
+      { data_type => 'bigint', is_nullable => 0, is_foreign_key => 1 },
+    voter_id =>
+      { data_type => 'bigint', is_nullable => 0, is_foreign_key => 1 },
+    flag => { data_tpye => 'smallint' },
+);
 __PACKAGE__->set_primary_key(qw(option_id voter_id));
 
 =head1 CONSTRAINS
@@ -47,7 +53,7 @@ a vote is always cast from a voter by its given voter_id.
 
 =cut
 
-__PACKAGE__->belongs_to( voter  => 'Schema::Result::Voter',  'voter_id'  );
+__PACKAGE__->belongs_to( voter => 'Schema::Result::Voter', 'voter_id' );
 
 =head1 METHODS
 
@@ -59,7 +65,7 @@ survey referenced to by its survey_usercode. the flag attribute is set to true.
 =cut
 
 sub set {
-    my  ( $self, $survey_usercode, $option_position, $voter_name ) = @_;
+    my ( $self, $survey_usercode, $option_position, $voter_name ) = @_;
 }
 
 =head2 unset( $survey_usercode, $option_position, $voter_name )
@@ -71,7 +77,7 @@ false.
 =cut
 
 sub unset {
-    my  ( $self, $survey_usercode, $option_position, $voter_name ) = @_;
+    my ( $self, $survey_usercode, $option_position, $voter_name ) = @_;
 }
 
 =head2 delete_all_of_survey( $survey_admincode )

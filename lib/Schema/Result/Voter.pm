@@ -37,7 +37,17 @@ date of the last action applied by the voter (place a vote or revoke a vote).
 
 =cut
 
-__PACKAGE__->add_columns(qw(id survey_id name email registerdate actiondate));
+__PACKAGE__->add_columns(
+    id => { data_type => 'bigint', is_nullable => 0, is_auto_increment => 1 },
+    survey_id =>
+      { data_tpye => 'bigint', is_nullable => 0, is_foreign_key => 1 },
+    name  => { data_type => 'varchar', size => 255, is_nullable => 0 },
+    email => { data_type => 'varchar', size => 512 },
+    registerdate =>
+      { data_type => 'datetime', is_nullable => 0, default_value => \'now()' },
+    actiondate =>
+      { data_type => 'datetime', is_nullable => 0, default_value => \'now()' },
+);
 __PACKAGE__->set_primary_key('id');
 
 =head1 CONSTRAINS
@@ -58,7 +68,6 @@ the user may vote for zero, one or many options of the corresponding survey.
 =cut
 
 __PACKAGE__->has_many( votes => 'Schema::Result::Vote', 'voter_id' );
-
 
 =head1 METHODS
 

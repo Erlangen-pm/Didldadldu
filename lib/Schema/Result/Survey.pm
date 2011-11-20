@@ -52,11 +52,11 @@ flag whether the survey is active. voters can only vote for active surveys.
 =cut
 
 __PACKAGE__->add_columns(
-    id => { data_type => 'integer', is_nullable => 0, is_auto_increment => 1 },
+    id => { data_type => 'bigint', is_nullable => 0, is_auto_increment => 1 },
     usercode  => { data_type => 'char',    size => 16,   is_nullable => 0 },
     admincode => { data_type => 'char',    size => 32,   is_nullable => 0 },
     text      => { data_type => 'varchar', size => 4096, is_nullable => 0 },
-    initiator => { data_type => 'varchar', size => 512,  is_nullable => 0 },
+    initiator => { data_type => 'varchar', size => 255,  is_nullable => 0 },
     email     => { data_type => 'varchar', size => 512,  is_nullable => 1 },
     creationdate =>
       { data_type => 'datetime', is_nullable => 0, default_value => \'now()' },
