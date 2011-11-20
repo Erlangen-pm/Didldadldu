@@ -1,4 +1,4 @@
-package Didledadldu::Manage_Survey;
+package Didledadldu::Manage::Survey;
 
 
 1;

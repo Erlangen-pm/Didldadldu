@@ -1,4 +1,4 @@
-package Didldadldu::Survey_Vote;
+package Didldadldu::Survey::Vote;
 
 1;
 

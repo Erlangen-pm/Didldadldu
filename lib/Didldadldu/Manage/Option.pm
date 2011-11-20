@@ -1,4 +1,4 @@
-package Didldadldu::Manage_Option;
+package Didldadldu::Manage::Option;
 
 =head1 Controler Manage_Option
 
