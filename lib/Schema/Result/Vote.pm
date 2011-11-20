@@ -21,9 +21,14 @@ foreing key refering to the option
 
 foreign key refering to the voter
 
+=head2 flag
+
+is 1, then the voter has cast her vote for the given option. or it is 0 if she 
+refuses the option.
+
 =cut
 
-__PACKAGE__->add_columns(qw(option_id voter_id));
+__PACKAGE__->add_columns(qw(option_id voter_id flag));
 __PACKAGE__->set_primary_key(qw(option_id voter_id));
 
 =head1 CONSTRAINS
@@ -49,7 +54,7 @@ __PACKAGE__->belongs_to( voter  => 'Schema::Result::Voter',  'voter_id'  );
 =head2 set( $survey_usercode, $option_position, $voter_name )
 
 set a vote for the voter by her name and the option by its position inside the
-survey referenced to by its survey_usercode.
+survey referenced to by its survey_usercode. the flag attribute is set to true.
 
 =cut
 
@@ -59,9 +64,9 @@ sub set {
 
 =head2 unset( $survey_usercode, $option_position, $voter_name )
 
-delete a vote for the voter by her name and the option by its position inside 
-the survey referenced to by its survey_usercode (the data set is deleted in 
-the table).
+revokes a vote for the voter by her name and the option by its position inside 
+the survey referenced to by its survey_usercode. the flag attribute is set to
+false.
 
 =cut
 

@@ -42,7 +42,16 @@ sub startup {
     $admin_option->route('/move/:new_position', new_position => qr(\d+))->to('manage_option#move');
     $admin_option->route('/delete')->to('manage_option#delete');
 
-    my $v = $r->route('/:usercode', usercode => qr(\w{16}));
+    my $userview = $r->route('/:usercode', usercode => qr(\w{16}));
+    $userview->via('get')->to('survey#view');
+    $userview->route('/register')->via('post')->to('survey_voter#register');
+    my $voter = $userview->route('/:name', name => qr(\w+));
+    $voter->route('/:modify')->via('post')->to('survey_voter#modify');
+    $voter->route('/:delete')->via('get')->to('survey_voter#delete');
+
+    my $voter_option = $voter->route('/:position', position => qr(\d+));
+    my $cast = $voter_option->route('/set')->via('get')->to('survey_vote#set');
+    $cast = $voter_option->route('/unset')->via('get')->to('survey_vote#unset');
 }
 
 1;

@@ -121,9 +121,9 @@ sub delete_all_of_survey {
 =head2 list_options( $survey_usercode, $name )
 
 returns a list of all options by position of a survey by the given 
-survey_usercode for the voter identified by its name. in the list, false
-value means, the user did decline the option, true means, the user accepted
-the option.
+survey_usercode for the voter identified by its name. in the list, 0
+means, the user did decline the option. 1 means, the user accepted
+the option. undef means, the user has not yet reviewed the option.
 
 =cut
 

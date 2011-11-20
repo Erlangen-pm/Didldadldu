@@ -184,8 +184,9 @@ sub list_options {
 
 returns a two dimensional array containing a list of voters in the first 
 dimension and a list of corresponding options in the second dimension.
-values can be true, if the voter applied for the particular option or
-false otherwise.
+values can be 1, if the voter applied for the particular option or
+0 otherwise. as a third option, the value can be undef, when the voter
+has not cast a vote yet for the option.
 
 =cut
 

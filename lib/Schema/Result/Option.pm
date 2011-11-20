@@ -139,14 +139,18 @@ sub delete_all_of_survey {
 =head2 list_voters( $survey_admincode, $position )
 
 list all the actual votes for the option referenced by the surveys 
-survey_admincode and its position inside the survey.
+survey_admincode and its position inside the survey. in the list
+1 means, the vote is cast for the option. 0 means, the vote
+ist cast against the option. undef means the particular user has not 
+yet cast a vote for that option (maybe because the option was just
+recently added).
 
 =cut
 
 sub list_voters {
     my ( $self, $survey_admincode, $position ) = @_;
-    my $voters;
-    return $voters;
+    my $votes;
+    return $votes;
 }
 
 1;
