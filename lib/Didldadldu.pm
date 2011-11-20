@@ -14,6 +14,9 @@ sub startup {
 
     my $config = $self->plugin('JSONConfig');
 
+    # POD-renderer - app documentation under /perldoc
+    $self->plugin('PODRenderer');
+
     # Model instance
     my $schema =
       Schema->connect( $config->{dsn}, undef, undef,
