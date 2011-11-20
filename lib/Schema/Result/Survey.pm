@@ -51,10 +51,34 @@ flag whether the survey is active. voters can only vote for active surveys.
 
 =cut
 
-__PACKAGE__->add_columns(qw(id usercode admincode text initiator email creationdate modificationdate active));
+__PACKAGE__->add_columns(
+    id => { data_type => 'integer', is_nullable => 0, is_auto_increment => 1 },
+    usercode  => { data_type => 'char',    size => 16,   is_nullable => 0 },
+    admincode => { data_type => 'char',    size => 32,   is_nullable => 0 },
+    text      => { data_type => 'varchar', size => 4096, is_nullable => 0 },
+    initiator => { data_type => 'varchar', size => 512,  is_nullable => 0 },
+    email     => { data_type => 'varchar', size => 512,  is_nullable => 1 },
+    creationdate =>
+      { data_type => 'datetime', is_nullable => 0, default_value => \'now()' },
+    modificationdate =>
+      { data_type => 'datetime', is_nullable => 0, default_value => \'now()' },
+    active =>
+      { data_type => 'smallint', is_nullable => 0, default_value => \'1' },
+);
+
 __PACKAGE__->set_primary_key('id');
 
 =head1 CONSTRAINS
+
+=head2 unique constraints
+
+usercode and admincode each must be unique in the table because users and 
+admins identify survey with these codes.
+
+=cut
+
+__PACKAGE__->add_unique_constraint( ['usercode'] );
+__PACKAGE__->add_unique_constraint( ['admincode'] );
 
 =head2 options
 
@@ -70,7 +94,7 @@ for every survey there are many voters registered which could vote for options.
 
 =cut
 
-__PACKAGE__->has_many( voters  => 'Schema::Result::Voter',  'survey_id' );
+__PACKAGE__->has_many( voters => 'Schema::Result::Voter', 'survey_id' );
 
 =head1 METHODS
 
